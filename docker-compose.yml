@@ -40,7 +40,6 @@ services:
       retries: 12
     volumes:
       - ./migrations/before/supabase_auth.sh:/docker-entrypoint-initdb.d/supabase_auth.sh
-      - ./custom-entrypoint.sh:/docker-entrypoint-initdb.d/custom-entrypoint.sh
       - postgres_data:/var/lib/postgresql/data
     command: ["docker-entrypoint.sh", "postgres"]
 
