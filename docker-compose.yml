@@ -39,8 +39,9 @@ services:
       timeout: 5s
       retries: 12
     volumes:
-      - ./migrations/before:/docker-entrypoint-initdb.d
+      - ./custom-entrypoint.sh:/docker-entrypoint-initdb.d/custom-entrypoint.sh
       - postgres_data:/var/lib/postgresql/data
+    command: ["docker-entrypoint.sh", "postgres"]
 
   redis:
     restart: on-failure
