@@ -39,7 +39,7 @@ services:
       timeout: 5s
       retries: 12
     volumes:
-      - ./migrations/before/supabase_auth.sh:/docker-entrypoint-initdb.d
+      - ./migrations/before:/docker-entrypoint-initdb.d
       - postgres_data:/var/lib/postgresql/data
 
   redis:
