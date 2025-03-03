@@ -33,16 +33,25 @@ RUN cargo build --profile=${PROFILE} --features "${FEATURES}" --bin appflowy_clo
 FROM debian:bookworm-slim AS runtime
 WORKDIR /app
 RUN apt-get update -y \
-  && apt-get install -y --no-install-recommends openssl ca-certificates curl \
-  && update-ca-certificates \
-  # Clean up
-  && apt-get autoremove -y \
-  && apt-get clean -y \
-  && rm -rf /var/lib/apt/lists/*
+    && apt-get install -y --no-install-recommends openssl ca-certificates curl \
+    && update-ca-certificates \
+    # Clean up
+    && apt-get autoremove -y \
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /app/target/release/appflowy_cloud /usr/local/bin/appflowy_cloud
 ENV APP_ENVIRONMENT production
 ENV RUST_BACKTRACE 1
+
+ARG GOTRUE_EXTERNAL_GITHUB_ENABLED
+ARG GOTRUE_EXTERNAL_GITHUB_CLIENT_ID
+ARG GOTRUE_EXTERNAL_GITHUB_SECRET
+ARG GOTRUE_EXTERNAL_GITHUB_REDIRECT_URI
+ENV GOTRUE_EXTERNAL_GITHUB_ENABLED=${GOTRUE_EXTERNAL_GITHUB_ENABLED}
+ENV GOTRUE_EXTERNAL_GITHUB_CLIENT_ID=${GOTRUE_EXTERNAL_GITHUB_CLIENT_ID}
+ENV GOTRUE_EXTERNAL_GITHUB_SECRET=${GOTRUE_EXTERNAL_GITHUB_SECRET}
+ENV GOTRUE_EXTERNAL_GITHUB_REDIRECT_URI=${GOTRUE_EXTERNAL_GITHUB_REDIRECT_URI}
 
 ARG APPFLOWY_APPLICATION_PORT
 ARG PORT
